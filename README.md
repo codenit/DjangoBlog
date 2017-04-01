@@ -5,6 +5,7 @@ This blog application which consist of:
 - Django Project Setup.
 - Some Function Based Views.
 - Admin Customization.
+- Django Messages Framework
 - Models, Model Forms, Forms, Form Validation.
 - Integrating Social Share Links.
 - Including Facebook Likes and Comments.
