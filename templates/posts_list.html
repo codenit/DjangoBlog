@@ -3,7 +3,11 @@
 {% block content %}
     <div class="col-sm-6 col-sm-offset-3">
         <h1>{{ title }}</h1>
-
+        <form method="get" action="">
+            <input type="text" name="q" placeholder="search posts" value='{{ request.GET.q }}'><!--"q" is "query" here we can user either-->
+            <input type="submit" value="SEARCH">
+        </form>
+        <hr>
         {% for obj in objects_list %}
             <div class="row">
             <div class="col-sm-12">
@@ -12,8 +16,14 @@
                     <img src="{{ obj.image.url }}" class="img-responsive">
                     {% endif %}
                     <div class="caption">
+                        {% if obj.draft %}
+                            <h3><span style="color: red">Draft</span>(for staff use only)</h3>
+                        {% endif %}
+                        {% if obj.publish > today %}
+                            <h3><span style="color: red">Future Post</span>(for staff use only)</h3>
+                        {% endif %}
                         <h3><a href="{{ obj.get_absolute_url}}" >{{ obj.title }}</a>
-                            <small>{{ obj.timestamp|timesince}} ago</small></h3>
+                            <small>{{ obj.publish}}</small></h3>
                         {% if obj.user.get_full_name %}
                             <p>Author: {{ obj.user.get_full_name }}</p>
                         {% endif %}
@@ -29,7 +39,7 @@
     <div class="pagination">
     <span class="step-links">
         {% if objects_list.has_previous %}
-            <a href="?page={{ objects_list.previous_page_number }}">previous</a>
+            <a href="?{{page_request_var}}={{ objects_list.previous_page_number }}&q= {{ request.GET.q }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -37,7 +47,7 @@
         </span>
 
         {% if objects_list.has_next %}
-            <a href="?page={{ objects_list.next_page_number }}">next</a>
+            <a href="?{{page_request_var}}={{ objects_list.next_page_number }}&q= {{ request.GET.q }}">next</a>
         {% endif %}
     </span>
 </div>

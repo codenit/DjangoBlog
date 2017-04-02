@@ -1,6 +1,8 @@
 from urllib.parse import quote_plus
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import timezone
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 # from django.core.urlresolvers import reverse
@@ -32,6 +34,9 @@ def post_create(request):
 
 def post_detail(request, pk=None):
     instance = get_object_or_404(Post, pk=pk)
+    if instance.publish > timezone.now().date() or instance.draft:
+        if not request.user.is_staff or not request.user.is_superuser:
+            raise Http404
     share_string = quote_plus(instance.content)
     context = {
         'title': instance.title,
@@ -42,10 +47,23 @@ def post_detail(request, pk=None):
 
 
 def post_list(request):
-    queryset_list = Post.objects.all()
+    today = timezone.now().date()
+    queryset_list = Post.objects.active()
+    if not request.user.is_staff or not request.user.is_superuser:
+        queryset_list = Post.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        queryset_list = queryset_list.filter(
+                        Q(title__icontains=query)|
+                        Q(content__icontains =query)|
+                        Q(user__first_name__contains=query)|
+                        Q(user__last_name__contains=query)
+                        )
     paginator = Paginator(queryset_list, 10)  # Show 25 contacts per page
 
-    page = request.GET.get('page')
+    page_request_var = "page"
+    page = request.GET.get(page_request_var)
     try:
         queryset = paginator.page(page)
     except PageNotAnInteger:
@@ -57,7 +75,9 @@ def post_list(request):
 
     context = {
         'objects_list': queryset,
-        'title': 'List'
+        'title': 'List',
+        'page_request_var': page_request_var,
+        'today': today,
     }
 
     return render(request, 'posts_list.html', context)
