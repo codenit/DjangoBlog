@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markdown_deux_tags %}
 
     <title>
         {% block title %}
@@ -36,7 +37,12 @@
         </a>
 
         <hr>
-    {{ instance.content|linebreaks}}<br/>
+{#pip install django-markdown-deux#}
+{#add to INSTALLED_APPS (settings.py) --> markdown_deux#}
+{#for finish add the filter markdown to instance.content  --> {{instance.content | markdown}}#}
+{#Just a note if you use this, place {% load markdown_deux_tags %} into the post_detail.html and not the base,#}
+
+    {{ instance.content|markdown}}<br/>
         <hr>
 
         <div class="fb-like" data-href="{{ request.build_absolute_uri }}"
