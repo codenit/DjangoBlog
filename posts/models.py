@@ -2,7 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
-
+from markdown_deux import markdown
 #to specify image upload location we define a function
 
 #def upload_location(instance, filename):
@@ -38,3 +38,7 @@ class Post(models.Model):
     # for latest posts on top of page
     class Meta:
         ordering = ['-timestamp', 'updated']
+
+    def get_markdown(self):
+        content = self.content
+        return markdown(content)

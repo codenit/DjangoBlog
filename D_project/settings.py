@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts',
     'markdown_deux',
-    'pagedown',
+    'pagedown',#for emulating stackoverflow#
 ]
 
 MIDDLEWARE = [
