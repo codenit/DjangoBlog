@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'posts',
     'markdown_deux',
     'pagedown',#for emulating stackoverflow#
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
