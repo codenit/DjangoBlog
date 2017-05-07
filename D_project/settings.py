@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'pagedown',#for emulating stackoverflow#
     'crispy_forms',
+    'accounts',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

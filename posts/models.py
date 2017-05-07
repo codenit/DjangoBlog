@@ -32,7 +32,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'pk': self.pk})
+        return reverse('posts:detail', kwargs={'pk': self.pk})
 
 
     # for latest posts on top of page
